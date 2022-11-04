@@ -348,7 +348,8 @@
 		UIColor			*calibratedColor = n;
 #else
 		NSColorSpace	*devRGBColorSpace = [NSColorSpace deviceRGBColorSpace];
-		NSColor			*calibratedColor = ((__bridge void *)[n colorSpace]==(__bridge void *)devRGBColorSpace) ? n :[n colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+        struct CGColorSpace *cg_devRGBColorSpace = [devRGBColorSpace CGColorSpace];
+		NSColor			*calibratedColor = ([n colorSpace]==cg_devRGBColorSpace) ? n :[n colorUsingColorSpaceName:NSDeviceRGBColorSpace];
 #endif
 		value = (void*)CFBridgingRetain(calibratedColor);
 		type = OSCValColor;
