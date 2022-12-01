@@ -348,8 +348,12 @@
 		UIColor			*calibratedColor = n;
 #else
 		NSColorSpace	*devRGBColorSpace = [NSColorSpace deviceRGBColorSpace];
+# if (__apple_build_version__ >= 14000029) // XCode 14
         struct CGColorSpace *cg_devRGBColorSpace = [devRGBColorSpace CGColorSpace];
 		NSColor			*calibratedColor = ([n colorSpace]==cg_devRGBColorSpace) ? n :[n colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+# else
+               NSColor                 *calibratedColor = ((__bridge void *)[n colorSpace]==(__bridge void *)devRGBColorSpace) ? n :[n colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+# endif
 #endif
 		value = (void*)CFBridgingRetain(calibratedColor);
 		type = OSCValColor;
